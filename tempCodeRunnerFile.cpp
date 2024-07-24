@@ -53,31 +53,28 @@ LMAT::LMAT(double* array, int size) {
     }
 }
 
-LMAT::~LMAT() {
-    // Empty destructor (can be used for cleanup if needed in the future)
-}
-
 void LMAT::zeros(int r, int c) {
     return;
 }
 
 void LMAT::printMatrix() {
+    cout << dimension;
     if (dimension == 1) {
-        for (int i = 0; i < cols; ++i) {
+        for (int i=0; i<rows; ++i){
             cout << matrix[i] << " ";
         }
         cout << endl;
-    } else if (dimension == 2) {
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                cout << matrix[i * cols + j] << " "; // Convert 2D indices to 1D
-            }
-            cout << endl;
-        }
     }
+    // if (dimension == 2) {
+    //     for (int i=0; i<rows; ++i){
+    //         for (int j=0; j<cols; ++j){
+    //             cout << matrix[i][j] << " ";
+    //         }
+    //         cout << endl;
+    // }
 }
-
-
+    
+}
 
 
 int main() {

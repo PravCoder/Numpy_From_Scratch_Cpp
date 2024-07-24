@@ -1,1 +1,1 @@
-## Numpy Library From Scratch in C++
+## LMAT is a linear algebra matrix library like numpy in C++
