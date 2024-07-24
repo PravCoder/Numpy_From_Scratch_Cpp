@@ -34,7 +34,7 @@ private:
     int cols;
     int dimension;
 
-    vector<double> matrix;
+    vector< vector<double> > matrix;
 
 };
 
@@ -48,9 +48,12 @@ LMAT::LMAT(double* array, int size) {
     rows = 1;
     cols = size;
     dimension = 1;
+    vector<double> single_row;
+
     for (int i=0; i<size; i++ ) {
-        matrix.push_back(array[i]);
+        single_row.push_back(array[i]);
     }
+    matrix.push_back(single_row);
 }
 
 LMAT::~LMAT() {
@@ -62,19 +65,16 @@ void LMAT::zeros(int r, int c) {
 }
 
 void LMAT::printMatrix() {
-    if (dimension == 1) {
-        for (int i = 0; i < cols; ++i) {
-            cout << matrix[i] << " ";
+
+    for (int i = 0; i < rows; ++i) {
+        cout << "[";
+        for (int j = 0; j < cols; ++j) {
+            cout << matrix[i][j] << " "; // Convert 2D indices to 1D
         }
+        cout << "]";
         cout << endl;
-    } else if (dimension == 2) {
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                cout << matrix[i * cols + j] << " "; // Convert 2D indices to 1D
-            }
-            cout << endl;
-        }
     }
+    
 }
 
 
