@@ -78,7 +78,16 @@ LMAT::~LMAT() {
 }
 
 void LMAT::zeros(int r, int c) {
-    return;
+    rows = r;
+    cols = c;
+    matrix.clear();
+    for (int i=0; i<rows; ++i) {
+        vector<double> single_row;
+        for (int j=0; j<cols; ++j) {
+            single_row.push_back(0);
+        }
+        matrix.push_back(single_row);
+    }
 }
 
 void LMAT::printMatrix() {
@@ -110,7 +119,14 @@ int main() {
         {1.0, 2.0, 3.0},
         {4.0, 5.0, 6.0}
     };
-    LMAT mat(nums1, 2, 3);
-    mat.printMatrix();
+    LMAT mat1(nums1, 2, 3);
+    mat1.printMatrix();
+
+    // Creating matrix of zeros of shape (r, c)
+    cout << endl << "Creating matrix of zeros of shape (r, c):" << endl;
+    LMAT mat2;
+    mat2.zeros(4, 4);
+    mat2.printMatrix();
+
 }
 
