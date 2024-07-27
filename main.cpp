@@ -36,6 +36,8 @@ public:
     
     LMAT multiply(LMAT mat);
 
+    LMAT add(LMAT mat);
+
     LMAT element_wise_prod(LMAT mat);
 
     void multiply(int scalar);
@@ -122,6 +124,23 @@ void LMAT::multiply(int scalar) {
         }
     }
 }   
+
+LMAT LMAT::add(LMAT mat) {
+    if (rows != mat.rows || cols != mat.cols) {
+        cout << "Error: shapes (" << rows << ", " << cols << "), (" << mat.rows << ", " << mat.cols << ") do not match for addition" << endl;
+        return LMAT();
+    }
+
+    vector< vector<double> > result(rows, vector<double>(cols, 0));
+    vector< vector<double> > matrix2 = mat.getMat();
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            result[i][j] += matrix[i][j] + matrix2[i][j];
+        }
+    }
+    return LMAT(result, rows, cols);
+}
+
 
 LMAT LMAT::multiply(LMAT mat) {
     // only possible when cols of first mat equals rows of second mat
@@ -252,6 +271,24 @@ int main() {
     mat6.multiply(5);
     cout << "Product 5:"<<endl;
     mat6.printMatrix();  // deosnt return new LMAT object
+
+
+    // Addition: dimensions have to be same
+    cout << endl << "Addition:" << endl;
+    nums1 = getRandomMatrix(3, 3);
+    nums3 = getRandomMatrix(3, 3);
+    mat1 = LMAT(nums1, 3, 3);
+    mat2 = LMAT(nums3, 3, 3);
+    cout << "Matrix 1:"<<endl;
+    mat1.printMatrix() ;
+    cout << "Matrix 2:"<<endl;
+    mat2.printMatrix();
+    cout << "Sum:"<<endl;
+    mat3 = mat1.add(mat2);
+    mat3.printMatrix();
+
+
+
 
 }
 
