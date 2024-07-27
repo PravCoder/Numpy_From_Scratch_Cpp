@@ -36,6 +36,8 @@ public:
     
     LMAT multiply(LMAT mat);
 
+    LMAT element_wise_prod(LMAT mat);
+
     vector< vector<double> > getMat();
 
 
@@ -112,8 +114,10 @@ void LMAT::printMatrix() {
 }
 
 LMAT LMAT::multiply(LMAT mat) {
+    // only possible when cols of first mat equals rows of second mat
     if (cols != mat.rows) {
         cout << "Error: shapes (" << rows << ", " << cols << "), (" << mat.rows << ", " << mat.cols << ") do not match for multiplication" << endl;
+        return LMAT();
     }
     vector< vector<double> > matrix2 = mat.getMat();
 
@@ -130,12 +134,34 @@ LMAT LMAT::multiply(LMAT mat) {
         for (int j = 0; j < p; ++j) {
             // iterate number of cols in first matrix
             for (int k = 0; k < n; ++k) {
+                // matrix[i][k]: loops through ith row
+                // matrix2[k][j]: loops through jth col, and mutiplying row in first and column in second
                 result[i][j] += matrix[i][k] * matrix2[k][j];
             }
         }
     }
     
     return LMAT(result, m, p);
+
+}
+
+LMAT LMAT::element_wise_prod(LMAT mat) {
+    if (rows != mat.rows || cols != mat.cols) {
+        cout << "Error: shapes (" << rows << ", " << cols << "), (" << mat.rows << ", " << mat.cols << ") do not match for element-wise multiplication" << endl;
+        return LMAT();
+    }
+
+    vector< vector<double> > matrix2 = mat.getMat();
+    vector< vector<double> > result(rows, vector<double>(cols, 0));  // ouptut-matrix
+
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            // cout << matrix[i][j] << " " <<matrix2[i][j];
+            result[i][j] += matrix[i][j] * matrix2[i][j];
+        }
+    }
+    return LMAT(result, rows, cols);
+
 
 }
 
@@ -177,7 +203,7 @@ int main() {
     mat2.zeros(4, 4);
     mat2.printMatrix();
 
-    // Multiplying 2 matricies
+    // Multiplying 2 matricies: only works where mat1.cols == mat2.rows
     cout << endl << "Multiplying 2 matricies of shape (2,3),(3,2):" << endl;
     vector< vector<double> > nums3 = getRandomMatrix(2, 3);
     vector< vector<double> > nums4 = getRandomMatrix(3, 2);
@@ -191,7 +217,21 @@ int main() {
     cout << "Product:"<<endl;
     LMAT mat5 = mat3.multiply(mat4);
     mat5.printMatrix();
-    
+
+    // Element-wise multiplication: only works with matricies of same shape
+    cout << endl << "Element-wise multiplying 2 matricies of shape (2,2),(2,2):" << endl;
+    vector< vector<double> > nums5 = getRandomMatrix(2, 2);
+    vector< vector<double> > nums6 = getRandomMatrix(2, 2);
+    LMAT mat6(nums5, 2, 2);
+    LMAT mat7(nums6, 2, 2);
+    cout << "Matrix 1:"<<endl;
+    mat6.printMatrix() ;
+    cout << "Matrix 2:"<<endl;
+    mat7.printMatrix();
+    cout << "Element-wise Product:"<<endl;
+    LMAT mat8 = mat6.element_wise_prod(mat7);
+    mat8.printMatrix();
+
 
 
 }
