@@ -47,6 +47,8 @@ public:
 
     LMAT log();
 
+    void reshape(int new_rows, int new_cols);
+
     LMAT element_wise_prod(LMAT mat);
 
     void multiply(int scalar);
@@ -240,6 +242,35 @@ LMAT LMAT::log() {
     return LMAT(result, rows, cols);
 }
 
+void LMAT::reshape(int new_rows, int new_cols) {
+    int total_elements = rows*cols;
+    if (total_elements != new_rows*new_cols) {
+        cout << "Error: shapes (" << rows << ", " << cols << ") reshaped into (" << new_rows << ", " << new_cols << ") do not match for reshaping" << endl;
+    }
+
+    vector< vector<double> > result(new_rows, vector<double>(new_cols, 0)); // init empty reshaped array filled with zerso
+    vector<double> flattened;
+
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            flattened.push_back(matrix[i][j]);
+        }
+    }
+
+    int cur_element = 0;
+    for (int i=0; i<new_rows; i++) {
+        for (int j=0; j<new_cols; j++) {
+            result[i][j] = flattened[cur_element];
+            cur_element += 1;
+        }
+    }
+
+    matrix = result;
+    rows=new_rows;
+    cols = new_cols;++cur_element;
+
+}
+
 
 LMAT LMAT::multiply(LMAT mat) {
     // only possible when cols of first mat equals rows of second mat
@@ -417,6 +448,15 @@ int main() {
     cout << "after log: " <<endl;
     mat2 = mat1.log();
     mat2.printMatrix();
+
+    // Reshape
+    cout << endl << "Reshaping Matrix (2,3)->(3,2):" << endl;
+    nums1 = getRandomMatrix(2, 3);
+    mat1 = LMAT(nums1, 2, 3);
+    mat1.printMatrix();
+    cout << "after reshaping into (3,2): " <<endl;
+    mat1.reshape(3, 2);
+    mat1.printMatrix();
 
 }
 
