@@ -38,6 +38,8 @@ public:
 
     LMAT element_wise_prod(LMAT mat);
 
+    void multiply(int scalar);
+
     vector< vector<double> > getMat();
 
 
@@ -112,6 +114,14 @@ void LMAT::printMatrix() {
     }
     
 }
+
+void LMAT::multiply(int scalar) {
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            matrix[i][j] *= scalar;
+        }
+    }
+}   
 
 LMAT LMAT::multiply(LMAT mat) {
     // only possible when cols of first mat equals rows of second mat
@@ -232,7 +242,16 @@ int main() {
     LMAT mat8 = mat6.element_wise_prod(mat7);
     mat8.printMatrix();
 
+    // Constant multiplication
+    cout << endl << "Constant multiplication by 5:" << endl;
+    nums1 = getRandomMatrix(2, 2);
+    mat6 = LMAT(nums1, 2, 2);
 
+    cout << "Matrix 1:"<<endl;
+    mat6.printMatrix();
+    mat6.multiply(5);
+    cout << "Product 5:"<<endl;
+    mat6.printMatrix();  // deosnt return new LMAT object
 
 }
 
