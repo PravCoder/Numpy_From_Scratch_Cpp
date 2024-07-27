@@ -38,6 +38,7 @@ public:
 
     LMAT add(LMAT mat);
     LMAT subtract(LMAT mat);
+    LMAT divide(LMAT mat);
 
     LMAT element_wise_prod(LMAT mat);
 
@@ -153,6 +154,22 @@ LMAT LMAT::subtract(LMAT mat) {
     for (int i=0; i<rows; i++) {
         for (int j=0; j<cols; j++) {
             result[i][j] += (matrix[i][j] - matrix2[i][j]);
+        }
+    }
+    return LMAT(result, rows, cols);
+}
+
+LMAT LMAT::divide(LMAT mat) {  // element-wise division
+    if (rows != mat.rows || cols != mat.cols) {
+        cout << "Error: shapes (" << rows << ", " << cols << "), (" << mat.rows << ", " << mat.cols << ") do not match for element-wise division" << endl;
+        return LMAT();
+    }
+
+    vector< vector<double> > result(rows, vector<double>(cols, 0));
+    vector< vector<double> > matrix2 = mat.getMat();
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            result[i][j] += (matrix[i][j] / matrix2[i][j]);
         }
     }
     return LMAT(result, rows, cols);
@@ -290,7 +307,7 @@ int main() {
     mat6.printMatrix();  // deosnt return new LMAT object
 
 
-    // Addition: dimensions have to be same
+    // Addition/Subtraction/Division: dimensions have to be same
     cout << endl << "Addition:" << endl;
     nums1 = getRandomMatrix(3, 3);
     nums3 = getRandomMatrix(3, 3);
@@ -301,7 +318,13 @@ int main() {
     cout << "Matrix 2:"<<endl;
     mat2.printMatrix();
     cout << "Sum:"<<endl;
+    mat3 = mat1.add(mat2);
+    mat3.printMatrix();
+    cout << "Subtract:"<<endl;
     mat3 = mat1.subtract(mat2);
+    mat3.printMatrix();
+    cout << "Divide:"<<endl;
+    mat3 = mat1.divide(mat2);
     mat3.printMatrix();
 
 
