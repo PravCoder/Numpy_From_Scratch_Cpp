@@ -40,6 +40,9 @@ public:
     LMAT subtract(LMAT mat);
     LMAT divide(LMAT mat);
 
+    double sum();
+    double mean();
+
     LMAT element_wise_prod(LMAT mat);
 
     void multiply(int scalar);
@@ -173,6 +176,29 @@ LMAT LMAT::divide(LMAT mat) {  // element-wise division
         }
     }
     return LMAT(result, rows, cols);
+}
+
+double LMAT::sum() {
+    int total = 0;
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            total += matrix[i][j];
+        }
+    }
+    
+    return total;
+}
+
+double LMAT::mean() {
+    double total = 0;
+    int num = rows*cols;  // number of elements
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            total += matrix[i][j];
+        }
+    }
+    
+    return total / num;
 }
 
 
@@ -327,6 +353,13 @@ int main() {
     mat3 = mat1.divide(mat2);
     mat3.printMatrix();
 
+    // Sum & Mean of matrix
+    cout << endl << "Sum of matrix:" << endl;
+    nums1 = getRandomMatrix(2, 2);
+    mat1 = LMAT(nums1, 2, 2);
+    mat1.printMatrix();
+    cout << "Sum: "<< mat1.sum() <<endl;
+    cout << "Mean: "<< mat1.mean() <<endl;
 
 
 
