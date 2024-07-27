@@ -43,6 +43,8 @@ public:
     double sum();
     double mean();
 
+    void transpose();
+
     LMAT element_wise_prod(LMAT mat);
 
     void multiply(int scalar);
@@ -199,6 +201,24 @@ double LMAT::mean() {
     }
     
     return total / num;
+}
+
+void LMAT::transpose() {
+    int new_rows = cols;
+    int new_cols = rows;
+    vector< vector<double> > result(new_rows, vector<double>(new_cols, 0)); // switch rows/cols rows=cols cols=rows
+
+    // iterate each row in original matrix
+    for (int i=0; i<rows; i++) {
+        // for each row in og-matrix, iterate rows in new-matrix or cols in og-matrix, can replace this with cols
+        for (int k=0; k<new_rows; k++) {
+            // helps to visualize
+            result[k][i] = matrix[i][k];
+        }
+    }
+    rows = new_rows;
+    cols = new_cols;
+    matrix = result;
 }
 
 
@@ -361,6 +381,14 @@ int main() {
     cout << "Sum: "<< mat1.sum() <<endl;
     cout << "Mean: "<< mat1.mean() <<endl;
 
+    // Transpose
+    cout << endl << "Transpose of matrix:" << endl;
+    nums1 = getRandomMatrix(2, 3);
+    mat1 = LMAT(nums1, 2, 3);
+    mat1.printMatrix();
+    cout << "after tranpose: " <<endl;
+    mat1.transpose();
+    mat1.printMatrix();
 
 
 }
