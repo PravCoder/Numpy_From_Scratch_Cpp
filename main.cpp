@@ -37,6 +37,7 @@ public:
     LMAT multiply(LMAT mat);
 
     LMAT add(LMAT mat);
+    LMAT subtract(LMAT mat);
 
     LMAT element_wise_prod(LMAT mat);
 
@@ -136,6 +137,22 @@ LMAT LMAT::add(LMAT mat) {
     for (int i=0; i<rows; i++) {
         for (int j=0; j<cols; j++) {
             result[i][j] += matrix[i][j] + matrix2[i][j];
+        }
+    }
+    return LMAT(result, rows, cols);
+}
+
+LMAT LMAT::subtract(LMAT mat) {
+    if (rows != mat.rows || cols != mat.cols) {
+        cout << "Error: shapes (" << rows << ", " << cols << "), (" << mat.rows << ", " << mat.cols << ") do not match for substraction" << endl;
+        return LMAT();
+    }
+
+    vector< vector<double> > result(rows, vector<double>(cols, 0));
+    vector< vector<double> > matrix2 = mat.getMat();
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<cols; j++) {
+            result[i][j] += (matrix[i][j] - matrix2[i][j]);
         }
     }
     return LMAT(result, rows, cols);
@@ -284,7 +301,7 @@ int main() {
     cout << "Matrix 2:"<<endl;
     mat2.printMatrix();
     cout << "Sum:"<<endl;
-    mat3 = mat1.add(mat2);
+    mat3 = mat1.subtract(mat2);
     mat3.printMatrix();
 
 
