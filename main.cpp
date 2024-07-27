@@ -45,6 +45,8 @@ public:
 
     void transpose();
 
+    LMAT log();
+
     LMAT element_wise_prod(LMAT mat);
 
     void multiply(int scalar);
@@ -210,15 +212,32 @@ void LMAT::transpose() {
 
     // iterate each row in original matrix
     for (int i=0; i<rows; i++) {
-        // for each row in og-matrix, iterate rows in new-matrix or cols in og-matrix, can replace this with cols
-        for (int k=0; k<new_rows; k++) {
+        // for each row in og-matrix, iterate rows in new-matrix or cols in og-matrix, can replace this with new_rows
+        for (int k=0; k<cols; k++) {
             // helps to visualize
-            result[k][i] = matrix[i][k];
+            result[k][i] = matrix[i][k];  // element in old matrix (i,j) is found in (j,i) in transposed matrix
         }
     }
     rows = new_rows;
     cols = new_cols;
     matrix = result;
+}
+
+LMAT LMAT::log() {
+    vector< vector<double> > result(rows, vector<double>(cols, 0));
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (matrix[i][j] > 0) {
+                result[i][j] = std::log(matrix[i][j]);
+            } else {
+                cerr << "Warning: Non-positive value encountered in log computation." << endl;
+                result[i][j] = NAN; // Not a Number
+            }
+        }
+    }
+
+    return LMAT(result, rows, cols);
 }
 
 
@@ -390,6 +409,14 @@ int main() {
     mat1.transpose();
     mat1.printMatrix();
 
+    // Log
+    cout << endl << "Log of matrix:" << endl;
+    nums1 = getRandomMatrix(2, 2);
+    mat1 = LMAT(nums1, 2, 2);
+    mat1.printMatrix();
+    cout << "after log: " <<endl;
+    mat2 = mat1.log();
+    mat2.printMatrix();
 
 }
 
